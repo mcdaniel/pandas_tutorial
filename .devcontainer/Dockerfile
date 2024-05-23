@@ -1,11 +1,11 @@
 # Identify the base container image
-FROM python:3.9
+FROM python
 
 # Setup the image dependencies
 RUN apt-get update -y
 RUN useradd -ms /bin/bash mcdaniel
 RUN apt-get install -y python3-pip
-RUN pip install numpy pandas
+RUN pip3 install numpy pandas
 
 # Setup the directory to use for build
 USER mcdaniel
