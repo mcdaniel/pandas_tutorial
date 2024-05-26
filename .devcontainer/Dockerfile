@@ -3,7 +3,7 @@ FROM python
 
 # Setup the image dependencies
 RUN apt-get update -y
-RUN useradd -ms /bin/bash mcdaniel
+RUN useradd -m -s /bin/bash mcdaniel
 RUN apt-get install -y python3-pip
 RUN pip3 install numpy pandas
 
