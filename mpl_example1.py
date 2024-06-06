@@ -3,11 +3,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-letfreq = pd.read_csv("data/wordle_freq.csv")
+letfreq = pd.read_csv("data/wordle_freq.csv", index_col='letter')
 print(letfreq.head())
-hist = letfreq.hist(column='frequency', bins=26)
-hist.savefig("data/wordle_freq_hist.png")
+barser = letfreq['frequency'].transform(lambda x: x*100)
 
-# TODO: PROBLEM - I dont really understand what this is 
-# doing or what the paramters are.  Need to slow down 
-# and look at this carefully.
+barchart = barser.plot.bar(column='frequency', color='red', ylabel='Percentage (%)')
+barchart.grid(axis='y', zorder=0)
+plt.savefig("data/wordle_freq_bar.png")
+
