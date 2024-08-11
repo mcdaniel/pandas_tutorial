@@ -5,7 +5,7 @@ data = (
     {
         "Tags": [ "one", "two", "three" ],
         "Counts": [10, 20, 30],
-        "Colors": [ "red", "blue", "gree" ],
+        "Colors": [ "red", "blue", "green" ],
     }
 )
 df = pd.DataFrame(data)
