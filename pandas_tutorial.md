@@ -58,6 +58,13 @@ Both the read and to functions have a lot of optional arguments you can pass int
 
 Ok, now we have our data in memory and ready to do something with it.  We will continue here with manipulating the data within Pandas, but if you are aching to jump right in and start looking at the data, you can jump down to the visualization part of this tutorial which covers [Mathplotlib](#mathplotlib), and thereafter to is child [Seaborn](#seaborn).
 
+
+### Getting data out of pandas
+
+    return avwx_airports['icaoId'].tolist() - get column
+
+    return avwx_airports.loc['icaoId'].tolist() - get row
+
 ---
 
 ## Mathplotlib
