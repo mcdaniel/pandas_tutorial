@@ -2,7 +2,11 @@
 
 ## Overview
 
-Pandas is a python package for data analysis used for managing, querying and processing data in python.  It is part of the Anaconda distribution, which is large suite of tools for data processing.  Installing pandas is platform dependent, so check your local distrubution for information on how to process.  For example, 
+Pandas is a python package for data analysis used for managing, querying and processing data in python.  It is part of the Anaconda distribution, which is large suite of tools for data processing.  Installing pandas is platform dependent, so check your local distrubution for information on how to setup the installation and access via python code.  Instructions on installing the normal way are on the [pandas installation page](https://pandas.pydata.org/docs/getting_started/install.html).
+
+This tutorial is intended as a quick start guide to using Pandas and other tools for data management and research.  There are many sources, but I am begining with the [pandas getting started](https://pandas.pydata.org/docs/getting_started/index.html) documentation.  Later in this document as I get into other documents I will identify other sources.  
+
+## Dataframes
 
 The basic unit of data is called a **DataFrame**, which is a 2-dimensional object representing a collection of data.  Each DataFrame is organized as a set of rows and columns, which you can conceptually think about as a spreadshet.  Each column has a name (generally) and rows contain data for an example of each of the things you are recording.  The table cells can hold text, numnber, floating point, categorical data, and more.  The data in a column is called a **series**.
 
@@ -22,9 +26,7 @@ The basic unit of data is called a **DataFrame**, which is a 2-dimensional objec
 
 Much of the work you will do relates to the processing of the data, and most of that will be extracting, projecting, creating, and manipulating series.  The simplist way to think about it is to remain thinking of the DataFrame as a table of data like you might see in Excel or SQL.
 
-The most basic operation on at DataFrame is to access one of the series.  To do this, you just access it by the name of the field, just like an associative array with the key being the series name and the value being the array of values.
-
-You can also create series on the fly and use pandas functions to operate on and sumarize the data in the sample.  You can also create DataFrames on the fly using the series.
+The most basic operation on at DataFrame is to access one of the series.  To do this, you just access it by the name of the field, just like an associative array with the key being the series name and the value being the array of values.  Note that you can also create series on the fly and use pandas functions to operate on and sumarize the data in the sample.  You can also create DataFrames on the fly using the series.
 
 #### Series examples (example2.py)
 
@@ -37,31 +39,60 @@ You can also create series on the fly and use pandas functions to operate on and
     df2 = pd.DataFrame(grades)
     print("The grades dataframe:" + str(df2))
 
-## Getting Data into Pandas
+## Getting Data int and out of Pandas
 
 Most of the time you will not be creating all of your data within a python program, but loading it from an external source.  The simplest way to do this is to use the built in Pandas functions.  The one I use most frequently is the read function for CSV (comma separated value) data format.  It is super simple, where you give it a file name and call the appropriate function.  The supported types include csv, excel, json, etc.  You can also export the data to different data types in a similar manner.  You simply call a "to" function on the DataFrame and it create the external file.  
 
-Both the read and to functions have a lot of optional arguments you can pass into the call.  For example, you can export to a CSV and include a parameter of "index=false" to stop the export from including an index column.
+Both the read and to functions have a lot of optional arguments you can pass into the call.  For example, you can also specify which series you would like to have treated as the index with *index_col*, which can either be an integer (which is the number of the column/series that is indexed) or a label which identifies the column by name.  You can export to a CSV and include a parameter of "index_col=False" to stop the export from including an index column (i.e., a column that lists a number of its placement in the list--1, 2, 3...). On write, you can specify whether you want to export the index with the *index* (oddly, not index_col) parameter.
 
 #### Data loading example (example3.py)
 
     # Load files
     letfreq = pd.read_csv("data/wordle_freq.csv")
     print(letfreq)
-    bigrams = pd.read_csv("data/wordle_bigram.csv")
+    bigrams = pd.read_csv("data/wordle_bigram.csv", index_col="bigram")
     print(bigrams)
-    trigrtam = pd.read_csv("data/wordle_trigram.csv")
+    trigrtam = pd.read_csv("data/wordle_trigram.csv", index_col=False)
     print(trigrams)
 
     # Export files
     letfreq.to_json("data/frequencies.json")
+    bigrams.to_json("data/bigram_frequencies.json", index=False)
 
 Ok, now we have our data in memory and ready to do something with it.  We will continue here with manipulating the data within Pandas, but if you are aching to jump right in and start looking at the data, you can jump down to the visualization part of this tutorial which covers [Mathplotlib](#mathplotlib), and thereafter to is child [Seaborn](#seaborn).
 
+We are going to use the above frequency data for the following tutorials, where each of the three data frames has the same schemea:
+
+       letter  count  frequency
+    0       a   5810      0.113
+    1       b   1379      0.027
+    2       c   1839      0.036
+    3       d   1680      0.033
+    4       e   4905      0.096
+    ...
+
+The only difference between our three data sets is that the *letfreq* series is replaced with two or three letter combinations, *bigram* and *trigram*, respectively.  The output from example3.py shows you the data in a format that visualizes this.
 
 ### Getting data out of pandas
 
+START HERE
+
+To get a series, you simply refernce it like it is an associative array, e.g.,
+
+    mylist = letfreq['frequency'].tolist()
+
+For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the "index" series (specified at the creation of the Dataframe) and .loc() is referenced by label.
+
+START HERE BY SHOWING HOW ILOC AND LOC WORK
+
+
+-- Select rows where Age is greater than 25
+df_filtered = df[df['Age'] > 25]
+print(df_filtered)
+
+
     return avwx_airports['icaoId'].tolist() - get column
+
 
     return avwx_airports.loc['icaoId'].tolist() - get row
 
