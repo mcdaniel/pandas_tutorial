@@ -22,7 +22,7 @@ The basic unit of data is called a **DataFrame**, which is a 2-dimensional objec
     df = pd.DataFrame(data)
     print(df)
 
-## Working with Series
+## Working with series
 
 Much of the work you will do relates to the processing of the data, and most of that will be extracting, projecting, creating, and manipulating series.  The simplist way to think about it is to remain thinking of the DataFrame as a table of data like you might see in Excel or SQL.
 
@@ -39,7 +39,7 @@ The most basic operation on at DataFrame is to access one of the series.  To do 
     df2 = pd.DataFrame(grades)
     print("The grades dataframe:" + str(df2))
 
-## Getting Data int and out of Pandas
+## Getting Data into and out of Pandas
 
 Most of the time you will not be creating all of your data within a python program, but loading it from an external source.  The simplest way to do this is to use the built in Pandas functions.  The one I use most frequently is the read function for CSV (comma separated value) data format.  It is super simple, where you give it a file name and call the appropriate function.  The supported types include csv, excel, json, etc.  You can also export the data to different data types in a similar manner.  You simply call a "to" function on the DataFrame and it create the external file.  
 
@@ -73,44 +73,71 @@ We are going to use the above frequency data for the following tutorials, where 
 
 The only difference between our three data sets is that the *letfreq* series is replaced with two or three letter combinations, *bigram* and *trigram*, respectively.  The output from example3.py shows you the data in a format that visualizes this.
 
-### Getting data out of pandas
+### Extracting data from data frames
 
-START HERE
+To get a series, you simply reference it like it is an associative array, e.g.,
 
-To get a series, you simply refernce it like it is an associative array, e.g.,
-
+    print(letfreq['frequency'])
     mylist = letfreq['frequency'].tolist()
 
-For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the "index" series (specified at the creation of the Dataframe) and .loc() is referenced by label.
+For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the "index" series (specified at the creation of the Dataframe) and .loc() is referenced by label.  The function .at() also works like loc but is used for accessing a row/column cell and will raise a KeyError if it does not find that element.  You can add both row and column to access individual elemements (see below).
 
-START HERE BY SHOWING HOW ILOC AND LOC WORK
+    # Show a row of the table by index reference and integer row number
+    print(letfreq.loc['b'])
+    print(letfreq.iloc[1])
 
+    # Show a cell of the table referenced by row/column
+    print(letfreq.loc['b', 'frequency'])
+    print(letfreq.at['b', 'frequency'])
+    print(letfreq.iloc['1', '2'])
 
--- Select rows where Age is greater than 25
-df_filtered = df[df['Age'] > 25]
-print(df_filtered)
+Referencing data from pandas is very flexible.  You can extract by range or by selecting by a conditional value.  There are lots of options for the conditions that can test for value, wether some value is in a series, etc.  There is an extensive tutorial on [selection within data frames](https://pandas.pydata.org/docs/user_guide/indexing.html) documentation from the Pandas folks.  Some interesting examples include:
 
+    # Show a range of values in a series
+    print(letfreq.iloc[1, 0:2])
 
-    return avwx_airports['icaoId'].tolist() - get column
-
-
-    return avwx_airports.loc['icaoId'].tolist() - get row
-
----
+    # lastly, you can filter by a condition or conditions
+    print(letfreq[letfreq['frequency'] > 0.05])
+    print(letfreq[(letfreq['frequency'] > 0.05) & (letfreq['count'] > 3000)]
 
 ## Mathplotlib
 
-Now that we have some data, we are going to want to do something with it.  For now, we just want to visuailze it, which means we want to create some figures that allow us to see something interesting about the data.  
+Now that we have some data, we are going to want to do something with it.  For now, we just want to visuailze it, which means we want to create some figures that allow us to see something interesting.  We will initially talk about mathplotlib, which is a visulization framework for data (see documentation and tutorial [here](https://matplotlib.org/stable/users/index.html#users-guide-index)).  Later (below), we will talk about seaborne, which is an extension of the mathplotlib library with lots of cool extensions and modifications to make the plots easier to code and look better.
 
-The first thing to understand is a bit of terminology.  Within Mathplotlib, you operate on graphs where are valled **Figure**s, which may contain one more **Axes**.  Axes are specified in terms of x-y or x-y-z coordinate in whatever coordinate system you are using.
+The first thing to understand is a bit of terminology.  Within Mathplotlib, you operate on graphs where are called **Figure**s, which may contain one more **Axes**.  Axes are specified in terms of x-y or x-y-z coordinate in whatever coordinate system you are using.  There are other things like labels, legends, grids, spines, and whole lot more.  The best way to visualize it all is looking a the diagram provided by the matplotlib documentation.
 
-Most of the visualization happens within objects that are part of the library, where an object is some type of figure.  For this example, we will work with a bar chart.  There are really three steps to the process: (1) creating the plot object by calling a constructor and referecing the data series (or multiple series), (2) modifying the style and content by calling various annotation call, and (3) directing the output to a file or interface.
+![parts of a figure](https://matplotlib.org/stable/_images/anatomy.png)
+
+I will describe what all of those mean and how to control many of them later.  However, before getting into more complex use of graphs, data frames, etc.  lets do the simplest form of graph creation.  You can simply create a figure and subplot (which is a kind of way to create an axes) by calling a base generator called .subplots().  You then can add data by plotting via plot() and then show it using show().
+
+#### Mathplotlib example (mpl_example0.py)
+
+    import matplotlib.pyplot as plt
+
+    data = [
+      [-3.14,-2.89,-2.64,-2.39,...
+      [-0.00,-0.25,-0.48,-0.68,...
+    ]
+
+    # Create the Figure and Axes
+    fig, ax = plt.subplots()
+    ax.plot(data[0], data[1])
+    # plt.show()
+    plt.savefig("data/pi_chart.png")
+
+Note that the show() function is going to render the plot in a window of the local environment.  If you are like me and use a container for working with data, you will need too export the image to a file, which is most often done through the use of the plt.savefig() function.
+
+Here is what the output of this simple graph looks like:
+
+![mpl_example1.py output](data/pi_chart.png)
+
+
+Most of the visualization happens within objects that are part of the library, where an object is some type of figure.  For an initial example, we will work with a bar chart.  There are three steps to creating a visualization: (1) creating the plot object by calling a constructor and referecing the data series (or multiple series), (2) modifying the style and content by calling various annotation calls, and (3) directing the output to a file or interface.  One simple example of this is:
 
 #### Mathplotlib example (mpl_example1.py)
 
     # Load the data
     letfreq = pd.read_csv("data/wordle_freq.csv", index_col='letter')
-    print(letfreq.head())
     barser = letfreq['frequency'].transform(lambda x: x*100)
 
     # Plot the data using steps #1 (create), #2 (add style), and #3 (output)
@@ -118,11 +145,13 @@ Most of the visualization happens within objects that are part of the library, w
     barchart.grid(axis='y', zorder=0)
     plt.savefig("data/wordle_freq_bar.png")
 
-A thing to note here are the modification of the frequency using the transform function.  Here, the transform() calls the lambda function on each entry in the series to create a new series.  This is one of the cool ways to quickly derive data--we will talk about a bunch of others later in this tutorial.
+We have seen in the previous section about loading the data frame using the .read_csv() function.  Next we select some set of data and transform it.  Here, the transform() calls the lambda function on each entry in the series to create a new series.  This is one of the cool ways to quickly derive data--we will talk about a bunch of others later in this tutorial.
 
-The latter linmes show to create the barchart object with a few parameters to specify sytle, what data to plot, etc.  All of this is pretty self explainitory.  The second part makes a grid() call which add, not surprisingly a grid.  The thing to note is that almost everything can be added either through parameters on the constructor or using subsequent calls.
+START HERE
 
-The last part is a little weird.  We call the savefig() function which writes the plot to a file.  However, there is no reference to the object we just created.  The key here is that the plotting function implictly references the last thing you were working on.  Here, the oddity is that the designers of the library decided to expose both an object based and non-object based function.  This is a great source of confusion to new users I understand.
+The latter linmes show to create the barchart object with a few parameters to specify sytle, what data to plot, etc.  All of this is pretty self explainitory.  The second part makes a grid() call which add, not surprisingly grid lines (in this case the y-axis only).  The thing to note is that almost everything can be added either through parameters on the constructor or using subsequent calls.
+
+A note on saving the file which is frankly is a little weird.  Again, we call the savefig() function which writes the plot to a file.  However, there is no reference to the object we just created.  The key here is that the plotting function implictly references the last thing you were working on.  Here, the oddity is that the designers of the library decided to expose both an object based and non-object based function.  This is a great source of confusion to new users I understand.
 
 Here is what the output of this simple graph looks like:
 
@@ -137,6 +166,8 @@ bar
 histogram - takes a series and bins them into descrete values, calculates the numbers of occurences in each bin.
 
 ---
+
+## Jupyter widgets (could be fun for papers, etc).
 
 ## Seaborn
 
