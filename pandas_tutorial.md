@@ -104,18 +104,18 @@ Referencing data from pandas is very flexible.  You can extract by range or by s
 
 Now that we have some data, we are going to want to do something with it.  For now, we just want to visuailze it, which means we want to create some figures that allow us to see something interesting.  We will initially talk about mathplotlib, which is a visulization framework for data (see documentation and tutorial [here](https://matplotlib.org/stable/users/index.html#users-guide-index)).  Later (below), we will talk about seaborne, which is an extension of the mathplotlib library with lots of cool extensions and modifications to make the plots easier to code and look better.
 
-The first thing to understand is a bit of terminology.  Within Mathplotlib, you operate on graphs where are called **Figure**s, which may contain one more **Axes**.  Axes are specified in terms of x-y or x-y-z coordinate in whatever coordinate system you are using.  There are other things like labels, legends, grids, spines, and whole lot more.  The best way to visualize it all is looking a the diagram provided by the matplotlib documentation.
+The first thing to understand is a bit of terminology.  Within Mathplotlib, you operate on graphs where are called **Figure**s, which contains **Axes**, which in turn may contain one more **Axis** (we dicuss the difference between these objectt below--keenly the difference between Axes and Axis objects/data structures).  Looking a bit ahead, Axis are ways to plot data that are specified in terms of x-y or x-y-z coordinate in whatever coordinate system you are using.  There are other things like labels, legends, grids, spines, and whole lot more.  The best way to visualize it all is looking a the diagram provided by the matplotlib documentation.
 
 ![parts of a figure](https://matplotlib.org/stable/_images/anatomy.png)
 
 I will describe what all of those mean and how to control many of them later.  However, before getting into more complex use of graphs, data frames, etc.  lets do the simplest form of graph creation.  You can simply create a figure and subplot (which is a kind of way to create an axes) by calling a base generator called .subplots().  You then can add data by plotting via plot() and then show it using show().
 
-#### Mathplotlib example (mpl_example0.py)
+#### Mathplotlib example (mpl_example1.py)
 
     import matplotlib.pyplot as plt
 
     data = [
-      [-3.14,-2.89,-2.64,-2.39,...
+      [-3.14,-2.89,-2.64,-2.39,... # real data in python file
       [-0.00,-0.25,-0.48,-0.68,...
     ]
 
@@ -131,10 +131,9 @@ Here is what the output of this simple graph looks like:
 
 ![mpl_example1.py output](data/pi_chart.png)
 
+Of course, for most purposes you want to do something a bit more compllicated.  To start with, most of the visualization happens within objects that are part of the library, where an object is some type of figure.  For the next example, we will work with a bar chart.  There are three steps to creating a visualization: (1) creating the plot object by calling a constructor and referecing the data series (or multiple series), (2) modifying the style and content by calling various annotation calls, and (3) directing the output to a file or interface.  One simple example of this is:
 
-Most of the visualization happens within objects that are part of the library, where an object is some type of figure.  For an initial example, we will work with a bar chart.  There are three steps to creating a visualization: (1) creating the plot object by calling a constructor and referecing the data series (or multiple series), (2) modifying the style and content by calling various annotation calls, and (3) directing the output to a file or interface.  One simple example of this is:
-
-#### Mathplotlib example (mpl_example1.py)
+#### Mathplotlib example (mpl_example2.py)
 
     # Load the data
     letfreq = pd.read_csv("data/wordle_freq.csv", index_col='letter')
@@ -143,19 +142,64 @@ Most of the visualization happens within objects that are part of the library, w
     # Plot the data using steps #1 (create), #2 (add style), and #3 (output)
     barchart = barser.plot.bar(column='frequency', color='red', ylabel='Percentage (%)')
     barchart.grid(axis='y', zorder=0)
+    plt.title('Letter Frequency')
     plt.savefig("data/wordle_freq_bar.png")
 
 We have seen in the previous section about loading the data frame using the .read_csv() function.  Next we select some set of data and transform it.  Here, the transform() calls the lambda function on each entry in the series to create a new series.  This is one of the cool ways to quickly derive data--we will talk about a bunch of others later in this tutorial.
 
-START HERE
+The latter lines create the barchart object with a few parameters to specify sytle, what data to plot, etc.  All of this is pretty self explainitory.  The second part makes a grid() call which add, not surprisingly grid lines (in this case the y-axis only).  The thing to note is that almost everything can be added either through parameters on the constructor or using subsequent calls.
 
-The latter linmes show to create the barchart object with a few parameters to specify sytle, what data to plot, etc.  All of this is pretty self explainitory.  The second part makes a grid() call which add, not surprisingly grid lines (in this case the y-axis only).  The thing to note is that almost everything can be added either through parameters on the constructor or using subsequent calls.
+The second thing to note is the *zorder* paramater which allows you to control the order to which things are rendered--in this case a zorder of 0 means drop on top of everything else.  The result is that the grid lines are on top of the bar chart which makes their value a bit easier to judge.  Generally speaking, you can use zorder on almost all things to have precise control over the ordering of rendering.
 
-A note on saving the file which is frankly is a little weird.  Again, we call the savefig() function which writes the plot to a file.  However, there is no reference to the object we just created.  The key here is that the plotting function implictly references the last thing you were working on.  Here, the oddity is that the designers of the library decided to expose both an object based and non-object based function.  This is a great source of confusion to new users I understand.
+A note on setting the title and saving the file which is frankly is a little weird.  For the latter, we call the savefig() function which writes the plot to a file.  However, there is no reference to the object we just created.  The key here is that the title and plotting functions implictly reference the last thing you were working on.  Here, the oddity is that the designers of the library decided to expose both an object based and non-object (called implicit) interface.  This is a great source of confusion to new users I understand, but generally speaking you can do anything either with the object or non-object interface.
 
-Here is what the output of this simple graph looks like:
+Getting back to our example, this is the result output of this bar chart graph:
 
-![mpl_example1.py output](data/wordle_freq_bar.png)
+![mpl_example2.py output](data/wordle_freq_bar.png)
+
+
+We now turn to the most general object mentioned above, **Figure**.  A Figure is a whole region of visualization that you will visualize data in.  An Axes is a region for plotting data, where as an Axis is a particaular x, y, or z part of the figure which you put labels, tick marks, etc. on.
+
+The most straightforward figures are the onese where you create a figure, set title, axes, tics, gridlines, and then plot a few data series and go.  Below is a pretty involved but straighforward use of the basic interfaces for creating a graph:
+
+#### Mathplotlib example (mpl_example3.py)
+
+    maxval = 15
+    numbers = np.arange(maxval)
+    squares = np.fromfunction(lambda x: x**2, (maxval,))
+    cubes = np.fromfunction(lambda x: x**3, (maxval,))
+
+    fig, ax = plt.subplots()
+    ax.set_title('Squares, Cubes, and Fourths')
+    ax.set_xlabel('$x$')
+    ax.set_xticks(numbers)
+    ax.set_ylabel('$y = x^2$', color='blue')
+    ax.set_ylim(0, maxval**2)
+    ax.set_yticks(squares[3:])
+    ax.plot(numbers, squares)
+    ax.plot(numbers, cubes, 'yp')
+    ax.plot(numbers, [x**4 for x in range(maxval)], 'g--')
+    ax.legend(['Squares', 'Cubes', 'Fourths'], loc='upper left')
+    plt.grid(color='green', linestyle='--', linewidth=0.5)
+    plt.savefig("data/numbers.png")
+
+A couple of notes here.  When you specify ticks you have to indicate all of the tic marks you will want marked on the figure via an array of values.  In the case of this graph, I have marked every plotted value on the x axis and all of the squares starting with 3 on the y axis (if I did all of the squares the log plotting would mash together 1 and 4 and look terrible).  Also note that I simply included multiple plots to add multiple series in the data.
+
+The plot() function is incredibly flexible (as one would expect).  Loking at the second plot, I have added an optional second paramter to the cubes data which is the symbol format, where '*yp*' sets the points to be plotted as yellow pentagon (see documentation for format options).  The fourths is even more interesting, where I have created a data series on the flyu and given it a green dashed line for plotting (the 'g--' parameter).  There are lots of parameters laid out in the documentation page for [plot()](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html).  Suffice to say you can set colors, line styles, point sytles, and a multitude of other things.
+
+Lastly, you can create a legend that decribes all of the data types you are plotting.  Again, very customizable.  There are other ways of setting the legend values but what is in the sample code  is the simplest.
+
+Viaually, this is the result of all of this work:
+
+![mpl_example3.py output](data/numbers.png)
+
+There are all kinds of plots with different options (see [here](https://matplotlib.org/stable/plot_types/index.html) for a list and some demonstrations).  
+
+
+Viaually, this is the result of all of this work:
+
+![mpl_example4.py output](data/complex.png)
+
 
 ---
 
@@ -164,6 +208,9 @@ Types of figures
 bar
 
 histogram - takes a series and bins them into descrete values, calculates the numbers of occurences in each bin.
+
+
+tight_layout - critical for making it look nice
 
 ---
 
