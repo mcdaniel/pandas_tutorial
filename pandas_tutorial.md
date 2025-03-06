@@ -214,12 +214,14 @@ tight_layout - critical for making it look nice
 
 ---
 
-## Jupyter widgets (could be fun for papers, etc).
-
 ## Seaborn
 
-Seaborn is a wrapper for the Mathplotlib which greatly simplifies and enhances creating visuals.  It handles the same kinds of data frame, series (arrays) as matplotlib and generates plots as direct.  You cal also access the underlying matplotlib functions to fine tune your objects.
+Seaborn is a wrapper for the Mathplotlib which greatly simplifies and enhances creating visuals.  It handles the same kinds of data frames, series (arrays) as pandas and matplotlib and generates plots as direct.  Seaborne is built on top of matplotlib, so You cal also access the underlying matplotlib functions to fine tune your objects.
 
 One of the concepts seaborn introduces is the notion of a theme, which is a overarching set of parameters for images.  Basically, it is a set of optimizations for your plots which makes things work faster, easier, and look nicer.  For most people using the default theme is sufficient.  Under the hood, this is interacting with the matplotlib rcParam system.
 
 Perhaps the most powerful call in seaborn is to the relplot() function, which can create any number of visualizations from very simple inputs.  Basically, it shows the relationship between two variables in the form of a scatter or line plot.
+
+Starting from the beginning, lets do another very simple plot only this time with Seanborne.  For fun, we will go back to our original above.
+
+![SNS example 1](data/sns_pi_chart.png)
