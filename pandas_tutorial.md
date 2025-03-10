@@ -2,12 +2,13 @@
 
 ## Overview
 
-Pandas is a python package for data analysis used for managing, querying and processing data in python.  It is part of the Anaconda distribution, which is large suite of tools for data processing.  Installing pandas is platform dependent, so check your local distrubution for information on how to setup the installation and access via python code.  Instructions on installing the normal way are on the [pandas installation page](https://pandas.pydata.org/docs/getting_started/install.html).
+[Pandas](https://pandas.pydata.org/) is a python package for data analysis used for managing, querying and processing data in python.   Described later, [Mathplotlib](https://matplotlib.org/) and [Seaborn](https://seaborn.pydata.org/) are packages for data visualization.  Widely used in scientific computing, paper writing, AI, and other fields, the related tools provide programming interfaces to create figures that highlight trends and other artifacts of data.  This tutorial is intended as a quick start guide to using Pandas and other tools for data management and research.
 
-This tutorial is intended as a quick start guide to using Pandas and other tools for data management and research.  There are many sources, but I am begining with the [pandas getting started](https://pandas.pydata.org/docs/getting_started/index.html) documentation.  Later in this document as I get into other documents I will identify other sources.  
+## Pandas
 
-## Dataframes
+Pandas is part of the Anaconda distribution, which is large suite of tools for data processing.  Installing pandas is platform dependent, so check your local distrubution for information on how to setup the installation and access via python code.  Instructions on installing the normal way are on the [pandas installation page](https://pandas.pydata.org/docs/getting_started/install.html).  Note here that I am using the [pandas getting started](https://pandas.pydata.org/docs/getting_started/index.html) documentation as a starting place (more detail available there). 
 
+### Dataframes
 The basic unit of data is called a **DataFrame**, which is a 2-dimensional object representing a collection of data.  Each DataFrame is organized as a set of rows and columns, which you can conceptually think about as a spreadshet.  Each column has a name (generally) and rows contain data for an example of each of the things you are recording.  The table cells can hold text, numnber, floating point, categorical data, and more.  The data in a column is called a **series**.
 
 ##### Simple Example (example1.py)
@@ -22,7 +23,7 @@ The basic unit of data is called a **DataFrame**, which is a 2-dimensional objec
     df = pd.DataFrame(data)
     print(df)
 
-## Working with series
+### Working with series
 
 Much of the work you will do relates to the processing of the data, and most of that will be extracting, projecting, creating, and manipulating series.  The simplist way to think about it is to remain thinking of the DataFrame as a table of data like you might see in Excel or SQL.
 
@@ -39,7 +40,7 @@ The most basic operation on at DataFrame is to access one of the series.  To do 
     df2 = pd.DataFrame(grades)
     print("The grades dataframe:" + str(df2))
 
-## Getting Data into and out of Pandas
+### Getting Data into and out of Pandas
 
 Most of the time you will not be creating all of your data within a python program, but loading it from an external source.  The simplest way to do this is to use the built in Pandas functions.  The one I use most frequently is the read function for CSV (comma separated value) data format.  It is super simple, where you give it a file name and call the appropriate function.  The supported types include csv, excel, json, etc.  You can also export the data to different data types in a similar manner.  You simply call a "to" function on the DataFrame and it create the external file.  
 
@@ -73,7 +74,7 @@ We are going to use the above frequency data for the following tutorials, where 
 
 The only difference between our three data sets is that the *letfreq* series is replaced with two or three letter combinations, *bigram* and *trigram*, respectively.  The output from example3.py shows you the data in a format that visualizes this.
 
-### Extracting data from data frames
+#### Extracting data from data frames
 
 To get a series, you simply reference it like it is an associative array, e.g.,
 
@@ -102,7 +103,7 @@ Referencing data from pandas is very flexible.  You can extract by range or by s
 
 ## Mathplotlib
 
-Now that we have some data, we are going to want to do something with it.  For now, we just want to visuailze it, which means we want to create some figures that allow us to see something interesting.  We will initially talk about mathplotlib, which is a visulization framework for data (see documentation and tutorial [here](https://matplotlib.org/stable/users/index.html#users-guide-index)).  Later (below), we will talk about seaborne, which is an extension of the mathplotlib library with lots of cool extensions and modifications to make the plots easier to code and look better.
+Now that we have some data, we are going to want to do something with it.  For now, we just want to visuailze it, which means we want to create some figures that allow us to see something interesting.  We will initially talk about mathplotlib, which is a visulization framework for data (see documentation and tutorial [here](https://matplotlib.org/stable/users/index.html#users-guide-index)).  Later (below), we will talk about Seaborn, which is an extension of the mathplotlib library with lots of cool extensions and modifications to make the plots easier to code and look better.
 
 The first thing to understand is a bit of terminology.  Within Mathplotlib, you operate on graphs where are called **Figure**s, which contains **Axes**, which in turn may contain one more **Axis** (we dicuss the difference between these objectt below--keenly the difference between Axes and Axis objects/data structures).  Looking a bit ahead, Axis are ways to plot data that are specified in terms of x-y or x-y-z coordinate in whatever coordinate system you are using.  There are other things like labels, legends, grids, spines, and whole lot more.  The best way to visualize it all is looking a the diagram provided by the matplotlib documentation.
 
@@ -193,35 +194,62 @@ Viaually, this is the result of all of this work:
 
 ![mpl_example3.py output](data/numbers.png)
 
-There are all kinds of plots with different options (see [here](https://matplotlib.org/stable/plot_types/index.html) for a list and some demonstrations).  
+There are all kinds of plots with different options (see [here](https://matplotlib.org/stable/plot_types/index.html) for a list and some demonstrations).  You can also create a figure with mutiple plots, axes, etc.  The limtations are boundless and they grow in depth every day.
 
+One last example shows some of this power and deomstrates a couple of plot types, namely scatter and error bar plots.  See here:
 
-Viaually, this is the result of all of this work:
+#### Mathplotlib example (mpl_example4.py)
+
+    sctrx = np.random.randint(0, 100, 100)
+    sctry = np.random.randint(0, 100, 100)
+
+    errbarx = np.arange(0,100,5)
+    errbary = np.random.randint(0, 100, 20)
+    errbar_error = np.random.randint(10, 25, 20)
+
+    fix, axes = plt.subplots(2, 1)
+    axes[0].scatter(sctrx, sctry, color="red")
+    axes[0].set_title("Scatter Plot")
+    axes[0].grid(True)
+    axes[1].errorbar(errbarx, errbary, yerr=errbar_error, fmt='o')
+    axes[1].set_title("Error Bar Plot")
+    axes[1].grid(True)
+    plt.tight_layout()
+    plt.savefig("data/complex.png")
+
+Getting into this code, you can see the plot begins with the creation of a 2 by 1 (stacked) set of plots.  Once we have those, we can do all of the things we did above--but this time to each index of the array of axes--including setting titles, grids, etc.  Lastly, we include the tight_layout() function because it ensures the data layout allows for the annotations of the different axes to not interfer (i.e., overlay) each other.  The resulting figure looks like this:
 
 ![mpl_example4.py output](data/complex.png)
 
-
----
-
-Types of figures
-
-bar
-
-histogram - takes a series and bins them into descrete values, calculates the numbers of occurences in each bin.
-
-
-tight_layout - critical for making it look nice
-
----
-
 ## Seaborn
 
-Seaborn is a wrapper for the Mathplotlib which greatly simplifies and enhances creating visuals.  It handles the same kinds of data frames, series (arrays) as pandas and matplotlib and generates plots as direct.  Seaborne is built on top of matplotlib, so You cal also access the underlying matplotlib functions to fine tune your objects.
+Seaborn is a wrapper for the mathplotlib which greatly simplifies and enhances creating visuals.  In short, the result of Seaborn is to make figures which appear to be more stylized (some would say more modern and professional).  It handles the same kinds of data frames, series (arrays) as pandas and matplotlib and generates plots as direct.  Seaborn is built on top of matplotlib, so You call also access the underlying matplotlib functions to fine tune your objects.
 
 One of the concepts seaborn introduces is the notion of a theme, which is a overarching set of parameters for images.  Basically, it is a set of optimizations for your plots which makes things work faster, easier, and look nicer.  For most people using the default theme is sufficient.  Under the hood, this is interacting with the matplotlib rcParam system.
 
 Perhaps the most powerful call in seaborn is to the relplot() function, which can create any number of visualizations from very simple inputs.  Basically, it shows the relationship between two variables in the form of a scatter or line plot.
 
-Starting from the beginning, lets do another very simple plot only this time with Seanborne.  For fun, we will go back to our original above.
+Starting from the beginning, lets do another the first simple plot from the previous section only this time with Seanborne.  Here, I use the pandas version of the data creation rather than the hardcoded definition.  The code here is:
+
+#### Seaborn example (sns_example1.py)
+
+    data = pd.DataFrame()
+    data['X'] = pd.array(np.arange(-3.14, 3.14, 0.1))
+    data['Y'] = pd.array([(math.sin(x)) for x in np.arange(-3.14, 3.14, 0.1)])
+
+    sns.set_theme()
+    df = pd.DataFrame(data)
+    sns.relplot(df, x="X", y="Y", kind="line")
+    plt.savefig("data/sns_pi_chart.png")
+
+There are really two lines of Seaborn here (the data frame and savefig() code is the same as above).  The first is set_theme(), which is a function to, well, set the theme.  Without the argument it defaults the standard theme.  However, the function is quite flexible and can be used to set a lot of paramters used to style the theme such as pallet, style. etc.  See the documentation for [set_theme()](https://seaborn.pydata.org/generated/seaborn.set_theme.html) for more information.
+
+The second function, relplot() is really the function used to setup the whole figure.  In this case a relative plot which visualizes relationships between variables in a dataset (in this case a data frame showing y=sin(x)).  The only non-obvious part of this is X and Y, which refer to series in the data frame to perform the relative plot on.
 
 ![SNS example 1](data/sns_pi_chart.png)
+
+Now turning to perhaps a more interesting graph, I want to
+
+https://seaborn.pydata.org/generated/seaborn.scatterplot.html
+
+#![SNS example 2](data/sns_scatter.png)
