@@ -12,7 +12,6 @@ data['X'] = pd.array(np.arange(0, 100))
 data['Y'] = pd.array([(np.random.randint(0,x+1)) for x in data['X']])
 data['Category'] = pd.array([words[(np.random.randint(0,len(words)))] for x in range(0,100)])
 data['Size'] = pd.array([(np.random.randint(0,5)) for x in range(0,100)])
-print(data)
 
 sns.set_theme()
 sns.scatterplot(data, x='X', y='Y', hue='Category', size='Size', legend='full')

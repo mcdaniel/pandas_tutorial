@@ -9,7 +9,8 @@ MPL_FIGS=	data/mpl_pi_chart.png \
 			data/mpl_numbers.png \
 			data/mpl_complex.png
 SNS_FIGS=	data/sns_pi_chart.png \
-			data/sns_scatter.png
+			data/sns_scatter.png \
+			data/sns_heatmap.png
 
 # Productions
 
@@ -32,6 +33,9 @@ data/sns_pi_chart.png: sns_example1.py
 
 data/sns_scatter.png: sns_example2.py
 	python sns_example2.py
+
+data/sns_heatmap.png: sns_example3.py
+	python sns_example3.py
 
 clean:
 	rm -f $(MPL_FIGS) $(SNS_FIGS)
