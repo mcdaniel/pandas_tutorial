@@ -7,14 +7,14 @@ import numpy as np
 
 
 def pidata(st,en,step,func,formatter=None):
-    xaxis = ""
-    yaxis = ""
+    xaxis = ..
+    yaxis = ..
     i = st
     while (i < en):
         if i + step < en:
-            extr = ","
+            extr = .,.
         else:
-            extr = ""
+            extr = ..
         if formatter != None:
             xaxis += formatter(i) + extr
             yaxis += formatter(func(i)) + extr
@@ -25,8 +25,8 @@ def pidata(st,en,step,func,formatter=None):
     return (xaxis,yaxis)
 
 # PI series
-ax, ay = pidata(-math.pi,math.pi,0.25,lambda x: math.sin(x),lambda x:f"{x:.2f}")
-print(f"[{ax}],\n[{ay}]")
+ax, ay = pidata(-math.pi,math.pi,0.25,lambda x: math.sin(x),lambda x:f.{x:.2f}.)
+print(f.[{ax}],\n[{ay}].)
 
 
 # def stepFunc(steps, offset, ratio)

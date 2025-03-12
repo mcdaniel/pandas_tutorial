@@ -16,8 +16,8 @@ The basic unit of data is called a **DataFrame**, which is a 2-dimensional objec
     import pandas as pd
     data = (
         {
-            "Counts": [10, 20, 30],
-            "Colors": [ "red", "blue", "green" ],
+            'Counts': [10, 20, 30],
+            'Colors': [ 'red', 'blue', 'green' ],
         }
     )
     df = pd.DataFrame(data)
@@ -31,34 +31,34 @@ The most basic operation on at DataFrame is to access one of the series.  To do 
 
 #### Series examples (example2.py)
 
-    series = df["Tags"]
+    series = df['Tags']
     print(series)
-    grades = pd.Series([90, 80, 70, 65, 77, 98, 32, 99, 88, 86], name="Grades")
-    print("The grades series:" + str(grades))
+    grades = pd.Series([90, 80, 70, 65, 77, 98, 32, 99, 88, 86], name='Grades')
+    print('The grades series:' + str(grades))
     grades.describe()
-    print("The average grade is:" + str(grades.mean()))
+    print('The average grade is:' + str(grades.mean()))
     df2 = pd.DataFrame(grades)
-    print("The grades dataframe:" + str(df2))
+    print('The grades dataframe:' + str(df2))
 
 ### Getting Data into and out of Pandas
 
-Most of the time you will not be creating all of your data within a python program, but loading it from an external source.  The simplest way to do this is to use the built in Pandas functions.  The one I use most frequently is the read function for CSV (comma separated value) data format.  It is super simple, where you give it a file name and call the appropriate function.  The supported types include csv, excel, json, etc.  You can also export the data to different data types in a similar manner.  You simply call a "to" function on the DataFrame and it create the external file.  
+Most of the time you will not be creating all of your data within a python program, but loading it from an external source.  The simplest way to do this is to use the built in Pandas functions.  The one I use most frequently is the read function for CSV (comma separated value) data format.  It is super simple, where you give it a file name and call the appropriate function.  The supported types include csv, excel, json, etc.  You can also export the data to different data types in a similar manner.  You simply call a 'to' function on the DataFrame and it create the external file.  
 
-Both the read and to functions have a lot of optional arguments you can pass into the call.  For example, you can also specify which series you would like to have treated as the index with *index_col*, which can either be an integer (which is the number of the column/series that is indexed) or a label which identifies the column by name.  You can export to a CSV and include a parameter of "index_col=False" to stop the export from including an index column (i.e., a column that lists a number of its placement in the list--1, 2, 3...). On write, you can specify whether you want to export the index with the *index* (oddly, not index_col) parameter.
+Both the read and to functions have a lot of optional arguments you can pass into the call.  For example, you can also specify which series you would like to have treated as the index with *index_col*, which can either be an integer (which is the number of the column/series that is indexed) or a label which identifies the column by name.  You can export to a CSV and include a parameter of 'index_col=False' to stop the export from including an index column (i.e., a column that lists a number of its placement in the list--1, 2, 3...). On write, you can specify whether you want to export the index with the *index* (oddly, not index_col) parameter.
 
 #### Data loading example (example3.py)
 
     # Load files
-    letfreq = pd.read_csv("data/wordle_freq.csv")
+    letfreq = pd.read_csv('data/wordle_freq.csv')
     print(letfreq)
-    bigrams = pd.read_csv("data/wordle_bigram.csv", index_col="bigram")
+    bigrams = pd.read_csv('data/wordle_bigram.csv', index_col='bigram')
     print(bigrams)
-    trigrtam = pd.read_csv("data/wordle_trigram.csv", index_col=False)
+    trigrtam = pd.read_csv('data/wordle_trigram.csv', index_col=False)
     print(trigrams)
 
     # Export files
-    letfreq.to_json("data/frequencies.json")
-    bigrams.to_json("data/bigram_frequencies.json", index=False)
+    letfreq.to_json('data/frequencies.json')
+    bigrams.to_json('data/bigram_frequencies.json', index=False)
 
 Ok, now we have our data in memory and ready to do something with it.  We will continue here with manipulating the data within Pandas, but if you are aching to jump right in and start looking at the data, you can jump down to the visualization part of this tutorial which covers [Mathplotlib](#mathplotlib), and thereafter to is child [Seaborn](#seaborn).
 
@@ -81,7 +81,7 @@ To get a series, you simply reference it like it is an associative array, e.g.,
     print(letfreq['frequency'])
     mylist = letfreq['frequency'].tolist()
 
-For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the "index" series (specified at the creation of the Dataframe) and .loc() is referenced by label.  The function .at() also works like loc but is used for accessing a row/column cell and will raise a KeyError if it does not find that element.  You can add both row and column to access individual elemements (see below).
+For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the 'index' series (specified at the creation of the Dataframe) and .loc() is referenced by label.  The function .at() also works like loc but is used for accessing a row/column cell and will raise a KeyError if it does not find that element.  You can add both row and column to access individual elemements (see below).
 
     # Show a row of the table by index reference and integer row number
     print(letfreq.loc['b'])
@@ -124,27 +124,27 @@ I will describe what all of those mean and how to control many of them later.  H
     fig, ax = plt.subplots()
     ax.plot(data[0], data[1])
     # plt.show()
-    plt.savefig("data/pi_chart.png")
+    plt.savefig('data/mpl_pi_chart.png')
 
 Note that the show() function is going to render the plot in a window of the local environment.  If you are like me and use a container for working with data, you will need too export the image to a file, which is most often done through the use of the plt.savefig() function.
 
 Here is what the output of this simple graph looks like:
 
-![mpl_example1.py output](data/pi_chart.png)
+![mpl_example1.py output](data/mpl_pi_chart.png)
 
 Of course, for most purposes you want to do something a bit more compllicated.  To start with, most of the visualization happens within objects that are part of the library, where an object is some type of figure.  For the next example, we will work with a bar chart.  There are three steps to creating a visualization: (1) creating the plot object by calling a constructor and referecing the data series (or multiple series), (2) modifying the style and content by calling various annotation calls, and (3) directing the output to a file or interface.  One simple example of this is:
 
 #### Mathplotlib example (mpl_example2.py)
 
     # Load the data
-    letfreq = pd.read_csv("data/wordle_freq.csv", index_col='letter')
+    letfreq = pd.read_csv('data/wordle_freq.csv', index_col='letter')
     barser = letfreq['frequency'].transform(lambda x: x*100)
 
     # Plot the data using steps #1 (create), #2 (add style), and #3 (output)
     barchart = barser.plot.bar(column='frequency', color='red', ylabel='Percentage (%)')
     barchart.grid(axis='y', zorder=0)
     plt.title('Letter Frequency')
-    plt.savefig("data/wordle_freq_bar.png")
+    plt.savefig('data/mpl_wordle_freq_bar.png')
 
 We have seen in the previous section about loading the data frame using the .read_csv() function.  Next we select some set of data and transform it.  Here, the transform() calls the lambda function on each entry in the series to create a new series.  This is one of the cool ways to quickly derive data--we will talk about a bunch of others later in this tutorial.
 
@@ -156,7 +156,7 @@ A note on setting the title and saving the file which is frankly is a little wei
 
 Getting back to our example, this is the result output of this bar chart graph:
 
-![mpl_example2.py output](data/wordle_freq_bar.png)
+![mpl_example2.py output](data/mpl_wordle_freq_bar.png)
 
 
 We now turn to the most general object mentioned above, **Figure**.  A Figure is a whole region of visualization that you will visualize data in.  An Axes is a region for plotting data, where as an Axis is a particaular x, y, or z part of the figure which you put labels, tick marks, etc. on.
@@ -182,7 +182,7 @@ The most straightforward figures are the onese where you create a figure, set ti
     ax.plot(numbers, [x**4 for x in range(maxval)], 'g--')
     ax.legend(['Squares', 'Cubes', 'Fourths'], loc='upper left')
     plt.grid(color='green', linestyle='--', linewidth=0.5)
-    plt.savefig("data/numbers.png")
+    plt.savefig('data/mpl_numbers.png')
 
 A couple of notes here.  When you specify ticks you have to indicate all of the tic marks you will want marked on the figure via an array of values.  In the case of this graph, I have marked every plotted value on the x axis and all of the squares starting with 3 on the y axis (if I did all of the squares the log plotting would mash together 1 and 4 and look terrible).  Also note that I simply included multiple plots to add multiple series in the data.
 
@@ -192,7 +192,7 @@ Lastly, you can create a legend that decribes all of the data types you are plot
 
 Viaually, this is the result of all of this work:
 
-![mpl_example3.py output](data/numbers.png)
+![mpl_example3.py output](data/mpl_numbers.png)
 
 There are all kinds of plots with different options (see [here](https://matplotlib.org/stable/plot_types/index.html) for a list and some demonstrations).  You can also create a figure with mutiple plots, axes, etc.  The limtations are boundless and they grow in depth every day.
 
@@ -208,18 +208,18 @@ One last example shows some of this power and deomstrates a couple of plot types
     errbar_error = np.random.randint(10, 25, 20)
 
     fix, axes = plt.subplots(2, 1)
-    axes[0].scatter(sctrx, sctry, color="red")
-    axes[0].set_title("Scatter Plot")
+    axes[0].scatter(sctrx, sctry, color='red')
+    axes[0].set_title('Scatter Plot')
     axes[0].grid(True)
     axes[1].errorbar(errbarx, errbary, yerr=errbar_error, fmt='o')
-    axes[1].set_title("Error Bar Plot")
+    axes[1].set_title('Error Bar Plot')
     axes[1].grid(True)
     plt.tight_layout()
-    plt.savefig("data/complex.png")
+    plt.savefig('data/mpl_complex.png')
 
 Getting into this code, you can see the plot begins with the creation of a 2 by 1 (stacked) set of plots.  Once we have those, we can do all of the things we did above--but this time to each index of the array of axes--including setting titles, grids, etc.  Lastly, we include the tight_layout() function because it ensures the data layout allows for the annotations of the different axes to not interfer (i.e., overlay) each other.  The resulting figure looks like this:
 
-![mpl_example4.py output](data/complex.png)
+![mpl_example4.py output](data/mpl_complex.png)
 
 ## Seaborn
 
@@ -239,8 +239,8 @@ Starting from the beginning, lets do another the first simple plot from the prev
 
     sns.set_theme()
     df = pd.DataFrame(data)
-    sns.relplot(df, x="X", y="Y", kind="line")
-    plt.savefig("data/sns_pi_chart.png")
+    sns.relplot(df, x='X', y='Y', kind='line')
+    plt.savefig('data/sns_pi_chart.png')
 
 There are really two lines of Seaborn here (the data frame and savefig() code is the same as above).  The first is set_theme(), which is a function to, well, set the theme.  Without the argument it defaults the standard theme.  However, the function is quite flexible and can be used to set a lot of paramters used to style the theme such as pallet, style. etc.  See the documentation for [set_theme()](https://seaborn.pydata.org/generated/seaborn.set_theme.html) for more information.
 
@@ -248,8 +248,54 @@ The second function, relplot() is really the function used to setup the whole fi
 
 ![SNS example 1](data/sns_pi_chart.png)
 
-Now turning to perhaps a more interesting graph, I want to
+Now turning to perhaps a more interesting graph, lets look at an example of a scatter plot.  Here, we have some complex data that we want to show on a graph that has X-Y points with a category and a size for each data point.  Example code would be:
 
-https://seaborn.pydata.org/generated/seaborn.scatterplot.html
+    words = ['Uno', 'Dos', 'Tres']
+    data = pd.DataFrame()
+    data['X'] = pd.array(np.arange(0, 100))
+    data['Y'] = pd.array([(np.random.randint(0,x+1)) for x in data['X']])
+    data['Category'] = pd.array([words[(np.random.randint(0,len(words)))] for x in range(0,100)])
+    data['Size'] = pd.array([(np.random.randint(0,5)) for x in range(0,100)])
+
+    sns.set_theme()
+    sns.scatterplot(data, x='X', y='Y', hue='Category', size='Size', legend='full')
+    plt.title('Scatter Plot')
+    plt.savefig('data/sns_scatter.png')
+
+To start with we construct a somewhat complex data frame that has an X and Y coordinates, a category, and a size.  These are used to define where a point goes (X,Y), what series is used to plot different kinds of items (Category), and how big to make each point (size).  
+
+Taking a look at the data frame, we have:
+
+         X   Y Category  Size
+    0    0   0      Dos     3
+    1    1   1      Dos     2
+    2    2   2      Uno     2
+    3    3   2      Uno     1
+    4    4   3      Uno     2
+    ..  ..  ..      ...   ...
+    95  95  73     Tres     2
+    96  96  17      Dos     4
+    97  97  54      Dos     3
+    98  98  55     Tres     0
+    99  99  98      Uno     2
+
+The code them simply uses the different series to plot the parts of the graph and lay it out with the X-Y location, category (which is configure withh 'hue') and size of the points.  Like all the rest, we set the theme.  Once done, we can then call the regular plot functions to add annotations, titles and all sorts of other things.  See the [documentation](https://seaborn.pydata.org/generated/seaborn.scatterplot.html) for scatter plot for more detail.  The finshed graph looks nice:
 
 #![SNS example 2](data/sns_scatter.png)
+
+Moving on, perhaps the classical Seaborn graph is the heat map, which details the relationship between categories of data amongst themselves.  We see this a lot in ML work where we look at the ability of things like transferability amongst models.  Here is the code:
+
+    words = [['Uno', 'Dos', 'Tres', 'Quarto'], ['Un', 'Duex', 'Trois', 'Quatre']]
+    data = pd.DataFrame()
+    data['index'] = pd.Series(words[0])
+    data.set_index('index', inplace=True)
+    for i in range(0, len(words[1])):
+        data[words[1][i]] = np.random.randint(0, (i+1)*25, len(words[0]))
+
+    sns.heatmap(data, annot=True, fmt='.2f')
+    plt.title('Heatmap')
+    plt.savefig('data/sns_heatmap.png')
+
+Again, the trick is making sure the data frame is setup correctly.  In this case, the data portion of the heatmap must be a rectangular data with an index being the Y labels and the remaining series being the X axis.  Styling as cool, settting colors etc. is all supported.  Some other things of note are the annotation (which creates the text inside each of the cells of the grid), and fmt (format, which sets how the numbers are formatted using the printf style decriptors).  See documentation for heatmaps for more detail.  The resulting figure is:
+
+#![SNS example 3](data/sns_heatmap.png)

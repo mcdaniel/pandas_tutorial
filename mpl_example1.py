@@ -11,4 +11,4 @@ data = [
 fig, ax = plt.subplots()
 ax.plot(data[0], data[1])
 # plt.show()
-plt.savefig("data/pi_chart.png")
+plt.savefig('data/mpl_pi_chart.png')

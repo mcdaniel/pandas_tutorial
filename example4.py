@@ -3,7 +3,7 @@
 import pandas as pd
 
 # Load files
-letfreq = pd.read_csv("data/wordle_freq.csv", index_col='letter')
+letfreq = pd.read_csv('data/wordle_freq.csv', index_col='letter')
 print(letfreq)
 
 # Show the frequency column
