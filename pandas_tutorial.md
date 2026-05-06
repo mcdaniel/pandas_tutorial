@@ -9,23 +9,25 @@
 Pandas is part of the Anaconda distribution, which is large suite of tools for data processing.  Installing pandas is platform dependent, so check your local distrubution for information on how to setup the installation and access via python code.  Instructions on installing the normal way are on the [pandas installation page](https://pandas.pydata.org/docs/getting_started/install.html).  Note here that I am using the [pandas getting started](https://pandas.pydata.org/docs/getting_started/index.html) documentation as a starting place (more detail available there). 
 
 ### Dataframes
-The basic unit of data is called a **DataFrame**, which is a 2-dimensional object representing a collection of data.  Each DataFrame is organized as a set of rows and columns, which you can conceptually think about as a spreadshet.  Each column has a name (generally) and rows contain data for an example of each of the things you are recording.  The table cells can hold text, numnber, floating point, categorical data, and more.  The data in a column is called a **series**.
+The basic unit of data is called a **DataFrame**, which is a 2-dimensional object representing a collection of data.  Each DataFrame is organized as a set of rows and columns, which you can conceptually think about as a spreadsheet or database trable (e.g., Excel or SQL).  Each column has a name (generally) and rows contain data for an example of each of the things you are recording.  The table cells can hold text, numnber, floating point, categorical data, and more.  The data in a column is called a **series**.
 
 ##### Simple Example (example1.py)
 
     import pandas as pd
     data = (
         {
+            'Tags': [ 'one', 'two', 'three' ],
             'Counts': [10, 20, 30],
             'Colors': [ 'red', 'blue', 'green' ],
         }
     )
     df = pd.DataFrame(data)
-    print(df)
+    print('Pandas version : ' + pd.__version__)
+    print(df) 
 
 ### Working with series
 
-Much of the work you will do relates to the processing of the data, and most of that will be extracting, projecting, creating, and manipulating series.  The simplist way to think about it is to remain thinking of the DataFrame as a table of data like you might see in Excel or SQL.
+Much of the work you will do relates to the processing of the data, and most of that will be extracting, projecting, creating, and manipulating series within a DataFrame.
 
 The most basic operation on at DataFrame is to access one of the series.  To do this, you just access it by the name of the field, just like an associative array with the key being the series name and the value being the array of values.  Note that you can also create series on the fly and use pandas functions to operate on and sumarize the data in the sample.  You can also create DataFrames on the fly using the series.
 
@@ -60,7 +62,9 @@ Both the read and to functions have a lot of optional arguments you can pass int
     letfreq.to_json('data/frequencies.json')
     bigrams.to_json('data/bigram_frequencies.json', index=False)
 
-Ok, now we have our data in memory and ready to do something with it.  We will continue here with manipulating the data within Pandas, but if you are aching to jump right in and start looking at the data, you can jump down to the visualization part of this tutorial which covers [Mathplotlib](#mathplotlib), and thereafter to is child [Seaborn](#seaborn).
+One key thing to note here is the use of the `index_col=` parameter in the `read_csv` call for the bigrams.  
+
+Ok, now we have our data in memory and ready to do something with it.  We will continue here with manipulating the data within Pandas, but if you are aching to jump right in and start looking at the data, you can jump down to the visualization part of this tutorial which covers [Mathplotlib](#mathplotlib), and thereafter to its child [Seaborn](#seaborn).
 
 We are going to use the above frequency data for the following tutorials, where each of the three data frames has the same schemea:
 
@@ -76,12 +80,12 @@ The only difference between our three data sets is that the *letfreq* series is 
 
 #### Extracting data from data frames
 
-To get a series, you simply reference it like it is an associative array, e.g.,
+As shown above, to get a series you simply reference it like it is an associative array, e.g.,
 
     print(letfreq['frequency'])
     mylist = letfreq['frequency'].tolist()
 
-For more complex extraction, there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the 'index' series (specified at the creation of the Dataframe) and .loc() is referenced by label.  The function .at() also works like loc but is used for accessing a row/column cell and will raise a KeyError if it does not find that element.  You can add both row and column to access individual elemements (see below).
+However, for more complex extraction there are two functions you use to extract row data from a data frame, loc() and iloc().  The difference between these two functions is that .iloc() accesses a particular element as identified by the an interger in index in the 'index' series (specified at the creation of the Dataframe) and .loc() is referenced by label.  The function .at() also works like loc but is used for accessing a row/column cell and will raise a KeyError if it does not find that element.  You can add both row and column references to access individual elemements (see below).
 
     # Show a row of the table by index reference and integer row number
     print(letfreq.loc['b'])
